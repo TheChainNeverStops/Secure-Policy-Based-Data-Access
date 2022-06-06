@@ -32,7 +32,7 @@ namespace SecurePolicyBasedDataAccess.Controllers
             _poort8Utilities = new Poort8Utilities();
         }
 
-        [HttpGet("Policies")]
+        [HttpGet]
         public async Task<IEnumerable<Poort8PolicyItem>> GetAsync([FromHeader] string token, [FromQuery] string myPartyId)
         {
             _client.DefaultRequestHeaders.Clear();
