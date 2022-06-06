@@ -45,8 +45,7 @@ namespace SecurePolicyBasedDataAccess.Controllers
                 string clientAssertion = await tokenService.GetTokenFromSchemaAsync(audParty,
                     issParty, privateKey, publicKey, urlSchemas);
 
-                string token = await tokenService.GetTokenAudienceAsync(urlGetToken, issParty, clientAssertion.Replace("\"", ""), _settings.Host);
-                return token;
+                return await tokenService.GetTokenAudienceAsync(urlGetToken, issParty, clientAssertion.Replace("\"", ""), _settings.Host);
             }
             catch (Exception ex)
             {
