@@ -75,6 +75,11 @@ namespace SecurePolicyBasedDataAccess.Controllers
 
         private string GetDelegationToken(TokenDelegationModel dataJson, bool showToken)
         {
+            if (showToken)
+            {
+                return dataJson.delegation_token;
+            }
+            
             var data = _poort8Utilities.ParseDelegationToken(dataJson.delegation_token);
             var isDeny = true;
             if (data.PolicySets.Any())
@@ -84,11 +89,6 @@ namespace SecurePolicyBasedDataAccess.Controllers
                 {
                     isDeny = data.PolicySets.Any(x => x.Policies.Any(p => p.Rules[0].Effect == "Deny"));
                 }
-            }
-
-            if (showToken)
-            {
-                return dataJson.delegation_token;
             }
 
             return isDeny ? "Deny" : "Permit";
