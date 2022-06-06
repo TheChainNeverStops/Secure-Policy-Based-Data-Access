@@ -24,7 +24,7 @@ namespace SecurePolicyBasedDataAccess.Controllers
             _client = httpClientFactory.CreateClient("iSHARE-Poort8");
         }
 
-        [HttpPost("{myIdentifier}")]
+        [HttpPost("myIdentifier")]
         public async Task<string> GetToken(IFormFile isharePublicKey, IFormFile isharePrivateKey, string myIdentifier)
         {
             var tokenService = new Poort8TokenService(_client);
