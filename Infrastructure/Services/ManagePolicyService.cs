@@ -51,16 +51,12 @@ namespace SecurePolicyBasedDataAccess.Infrastructure.Services
 
         public async Task<string> GetDelegationInfoAsync(string genericKey)
         {
-            
-
             string condition = "";
-
             string query = $"Select * from YourTable " +
                 $"Where {condition}" +
                 $"And DATE(fromDate) <= @today And DATE(toDate) >= @today";
 
-            return await GetAvailableKeyByConditionAsync(query, genericKey);
-            
+            return await GetAvailableKeyByConditionAsync(query, genericKey);            
         }
         
         public async Task<string> GetDataInfoAsync(string genericKey, int genericType, string issuer, string actor)
@@ -94,7 +90,6 @@ namespace SecurePolicyBasedDataAccess.Infrastructure.Services
                 {
                     today = DateTime.UtcNow.Date
                 });
-
 
                 foreach (var itemKey in genericKeys)
                 {
@@ -142,6 +137,5 @@ namespace SecurePolicyBasedDataAccess.Infrastructure.Services
 
             return "";
         }
-
     }
 }
