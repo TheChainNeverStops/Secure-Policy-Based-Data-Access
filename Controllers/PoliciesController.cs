@@ -44,8 +44,7 @@ namespace SecurePolicyBasedDataAccess.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     var jsonString = await response.Content.ReadAsStringAsync();
-                    var dataJson = JsonConvert.DeserializeObject<List<Poort8PolicyItem>>(jsonString);
-                    return dataJson;
+                    return JsonConvert.DeserializeObject<List<Poort8PolicyItem>>(jsonString);
                 }
             }
             catch (Exception ex)
