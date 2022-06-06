@@ -23,24 +23,25 @@ namespace SecurePolicyBasedDataAccess.Controllers
         private readonly HttpClient _client;
         private readonly IShareSettings _settings;
         private readonly Poort8Utilities _poort8Utilities;
+        private readonly IManagePolicyService _service;
 
-        public DelegationEvidenceController(IOptions<IShareSettings> settingsAccessor, IHttpClientFactory httpClientFactory)
+        public DelegationEvidenceController(IOptions<IShareSettings> settingsAccessor,
+            IManagePolicyService service, IHttpClientFactory httpClientFactory)
         {
             _settings = settingsAccessor.Value;
             _client = httpClientFactory.CreateClient("iSHARE-Poort8");
             _client.BaseAddress = new Uri(_settings.Host);
+            _service = service ?? throw new ArgumentNullException(nameof(service));
             _poort8Utilities = new Poort8Utilities();
         }
 
         [HttpGet("MyPolicies")]
         public async Task<string> GetPolicyAsync([FromHeader] string token, [FromQuery] Poort8VerifyDataModel model, [FromQuery] bool showToken = false)
-        {
-            var service = new ManagePolicyService(_settings.ConnectionStrings);
-            string genericKey = await service.GetDataInfoAsync(model.GenericKey, model.GenericType, model.Issuer, model.Actor);
-
+        {            
+            string genericKey = await _service.GetDataInfoAsync(model.GenericKey, model.GenericType, model.Issuer, model.Actor);
             if (string.IsNullOrEmpty(genericKey))
             {
-                Log.Error($"GetDataInfoAsync is not found genericKey");
+                Log.Error($"GetDataInfo is not found generic key");
                 genericKey = model.GenericKey;
             }
 
