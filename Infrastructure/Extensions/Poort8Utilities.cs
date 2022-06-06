@@ -7,7 +7,7 @@ namespace SecurePolicyBasedDataAccess.Infrastructure.Extensions
     public class Poort8Utilities
     {
         private readonly string _serviceProviders = "EU.EORI.TCNS";
-        private readonly string _purpose = "Unattended delivery or return";
+        private readonly string _purpose = "Your purpose";
         public Poort8Utilities()
         {
 
