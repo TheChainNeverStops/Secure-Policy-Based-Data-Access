@@ -60,7 +60,7 @@ namespace SecurePolicyBasedDataAccess.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     var jsonString = await response.Content.ReadAsStringAsync();
-                    var dataJson = JsonConvert.DeserializeObject<Poort8DelegationModel>(jsonString);
+                    var dataJson = JsonConvert.DeserializeObject<TokenDelegationModel>(jsonString);
                     return GetDelegationToken(dataJson, showToken);
                 }
             }
@@ -73,7 +73,7 @@ namespace SecurePolicyBasedDataAccess.Controllers
             return showToken ? "Not Found" : "Deny";
         }
 
-        private string GetDelegationToken(Poort8DelegationModel dataJson, bool showToken)
+        private string GetDelegationToken(TokenDelegationModel dataJson, bool showToken)
         {
             var data = _poort8Utilities.ParseDelegationToken(dataJson.delegation_token);
             var isDeny = true;
