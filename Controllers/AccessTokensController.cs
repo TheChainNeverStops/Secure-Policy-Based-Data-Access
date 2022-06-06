@@ -50,8 +50,8 @@ namespace SecurePolicyBasedDataAccess.Controllers
             }
             catch (Exception ex)
             {
-                Log.Error($"GetToken {ex.Message}", ex);
-                throw new Exception($"Error {ex.Message}");
+                Log.Error($"Get token from schema has error {ex.Message}", ex);
+                throw new Exception($"Get token from schema has error. Please try again later.");
             }
         }
     }
