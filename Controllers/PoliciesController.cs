@@ -51,7 +51,7 @@ namespace SecurePolicyBasedDataAccess.Controllers
             catch (Exception ex)
             {
                 Log.Error($"Get policies of {myPartyId} has error {ex.Message}", ex);
-                throw new Exception($"When get policies has error {ex.Message}");
+                throw new Exception($"When get policies has error. Please try again later.");
             }
 
             return new List<Poort8PolicyItem>();
