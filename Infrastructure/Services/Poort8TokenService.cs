@@ -15,7 +15,6 @@ namespace SecurePolicyBasedDataAccess.Infrastructure.Services
         public Poort8TokenService(HttpClient client)
         {
             _client = client;
-
         }
 
         public async Task<string> ReadFormFileAsync(IFormFile file)
