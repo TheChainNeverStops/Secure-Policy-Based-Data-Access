@@ -1,7 +1,3 @@
-using System.Collections.Generic;
-
-namespace SecurePolicyBasedDataAccess.Models
-{
     public class PolicySet
     {
         public int MaxDelegationDepth { get; set; }
@@ -45,4 +41,3 @@ namespace SecurePolicyBasedDataAccess.Models
     {
         public List<string> ServiceProviders { get; set; }
     }
-}
