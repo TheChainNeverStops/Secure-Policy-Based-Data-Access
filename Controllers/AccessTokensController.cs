@@ -40,12 +40,7 @@
                         ErrorMsg = $"Public key is not correct, please try again later."
                     });
                 }
-
-                publicKey = publicKey.Replace("-----BEGIN CERTIFICATE-----", "");
-                publicKey = publicKey.Replace("-----END CERTIFICATE-----", "");
-                publicKey = publicKey.Replace("\r\n", "");
-                publicKey = publicKey.Replace(" ", "");
-
+                
                 //Verify iSHARE ID with Certificate
                 bool isValid = VerifyCertificateWithIshareId(privateKey, publicKey, myIshareId);
                 if(!isValid)
@@ -71,6 +66,11 @@
 
         private bool VerifyCertificateWithIshareId(privateKey, publicKey, myIshareId)
         {
+            publicKey = publicKey.Replace("-----BEGIN CERTIFICATE-----", "");
+            publicKey = publicKey.Replace("-----END CERTIFICATE-----", "");
+            publicKey = publicKey.Replace("\r\n", "");
+            publicKey = publicKey.Replace(" ", "");
+
             var signingCertificate = new X509Certificate2(Convert.FromBase64String(publicKey));
             string subject = signingCertificate.Subject;
             if (string.IsNullOrEmpty(subject) || !subject.Contains(myIshareId))
