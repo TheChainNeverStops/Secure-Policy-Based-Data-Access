@@ -1,8 +1,3 @@
-using System;
-using System.Globalization;
-
-namespace SecurePolicyBasedDataAccess.Infrastructure.Extensions
-{
     public static class EpochTimeExtensions
     {
         public static string ToEpoch(this DateTime value)
@@ -19,4 +14,3 @@ namespace SecurePolicyBasedDataAccess.Infrastructure.Extensions
             return (long)elapsedTime.TotalSeconds;
         }
     }
-}
