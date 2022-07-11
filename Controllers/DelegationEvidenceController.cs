@@ -27,7 +27,7 @@
                 genericKey = model.GenericKey;
             }
 
-            var delegation = _poort8Utilities.CreateDelegationEvidence(genericKey, model.GenericType, model.Issuer, model.Actor);
+            var delegation = _utilities.CreateDelegationEvidence(genericKey, model.GenericType, model.Issuer, model.Actor);
             string dataRaw = JsonConvert.SerializeObject(delegation, new JsonSerializerSettings
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver(),
