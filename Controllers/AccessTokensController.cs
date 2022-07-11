@@ -16,10 +16,7 @@
         {            
             try
             {                
-                string privateKey = await tokenService.ReadFormFileAsync(isharePrivateKey);
-                string publicKey = await tokenService.ReadFormFileAsync(isharePublicKey);                 
-                string issParty = myIshareId;
-                
+                string privateKey = await tokenService.ReadFormFileAsync(isharePrivateKey);                
                 if (string.IsNullOrEmpty(privateKey))
                 {
                     return Ok(new
@@ -28,7 +25,8 @@
                         ErrorMsg = $"Private key is not correct, please try again later."
                     });
                 }
-
+                
+                string publicKey = await tokenService.ReadFormFileAsync(isharePublicKey);
                 if (string.IsNullOrEmpty(publicKey))
                 {
                     return Ok(new
@@ -49,9 +47,9 @@
                     });
                 }
                 
-                string clientAssertion = await tokenService.GetTokenFromSchemaAsync(_settings.TargetAudience, issParty, privateKey, publicKey, _settings.UrlSchemas);                    
+                string clientAssertion = await tokenService.GetTokenFromSchemaAsync(_settings.TargetAudience, myIshareId, privateKey, publicKey, _settings.UrlSchemas);                    
                 var tokenService = new ThirdPartyTokenService(_client);
-                return await tokenService.GetTokenAudienceAsync(_settings.UrlGetToken, issParty, clientAssertion.Replace("\"", ""), _settings.Host);
+                return await tokenService.GetTokenAudienceAsync(_settings.UrlGetToken, myIshareId, clientAssertion.Replace("\"", ""), _settings.Host);
             }
             catch (Exception ex)
             {
