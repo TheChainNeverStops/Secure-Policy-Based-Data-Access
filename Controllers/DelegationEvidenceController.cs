@@ -17,16 +17,9 @@
             _utilities = new ThirdPartyUtilities();
         }
 
-        [HttpGet("MyPolicies")]
-        public async Task<string> GetPolicyAsync([FromHeader] string token, [FromQuery] VerifyDataModel model, [FromQuery] bool showToken = false)
+        [HttpGet("VerifyingPermit")]
+        public async Task<string> VerifyingPermitAsync([FromHeader] string token, [FromQuery] VerifyDataModel model, [FromQuery] bool showToken = false)
         {            
-            string genericKey = await _service.GetDataInfoAsync(model.GenericKey, model.GenericType, model.Issuer, model.Actor);
-            if (string.IsNullOrEmpty(genericKey))
-            {
-                Log.Error($"GetDataInfo is not found generic key");
-                genericKey = model.GenericKey;
-            }
-
             var delegation = _utilities.CreateDelegationEvidence(genericKey, model.GenericType, model.Issuer, model.Actor);
             string dataRaw = JsonConvert.SerializeObject(delegation, new JsonSerializerSettings
             {
