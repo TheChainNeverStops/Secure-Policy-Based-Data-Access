@@ -1,4 +1,4 @@
-public class TokenService
+    public class TokenService
     {
         private readonly HttpClient _client;
         public TokenService(HttpClient client)
