@@ -8,7 +8,7 @@
         public AccessTokensController(IOptions<IShareSettings> settingsAccessor, IHttpClientFactory httpClientFactory)
         {
             _settings = settingsAccessor.Value;
-            _client = httpClientFactory.CreateClient("iSHARE-Poort8");
+            _client = httpClientFactory.CreateClient("iSHARE");
         }
 
         [HttpPost("{myIshareId}")]
