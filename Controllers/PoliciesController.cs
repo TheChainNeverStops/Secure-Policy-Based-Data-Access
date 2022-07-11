@@ -9,7 +9,7 @@
         public PoliciesController(IOptions<IShareSettings> settingsAccessor, IHttpClientFactory httpClientFactory)
         {
             _settings = settingsAccessor.Value;
-            _client = httpClientFactory.CreateClient("iSHARE-Poort8");
+            _client = httpClientFactory.CreateClient("iSHARE");
             _client.BaseAddress = new Uri(_settings.Host);
             _utilities = new ThirdPartyUtilities();
         }
@@ -35,7 +35,7 @@
                 throw new Exception($"When get policies has error. Please try again later.");
             }
 
-            return new List<Poort8PolicyItem>();
+            return new List<PolicyItem>();
         }
 
         [HttpPost("Policy")]
