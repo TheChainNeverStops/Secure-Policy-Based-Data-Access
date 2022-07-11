@@ -1,39 +1,21 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using SecurePolicyBasedDataAccess.Infrastructure.Extensions;
-using SecurePolicyBasedDataAccess.Infrastructure.Services;
-using SecurePolicyBasedDataAccess.Infrastructure.Settings;
-using SecurePolicyBasedDataAccess.Models;
-using Serilog;
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SecurePolicyBasedDataAccess.Controllers
-{
     [Route("api/[controller]")]
     [ApiController]
     public class PoliciesController : ControllerBase
     {
         private readonly HttpClient _client;
         private readonly IShareSettings _settings;
-        private readonly Poort8Utilities _poort8Utilities;
+        private readonly ThirdPartyUtilities _utilities;
 
         public PoliciesController(IOptions<IShareSettings> settingsAccessor, IHttpClientFactory httpClientFactory)
         {
             _settings = settingsAccessor.Value;
             _client = httpClientFactory.CreateClient("iSHARE-Poort8");
             _client.BaseAddress = new Uri(_settings.Host);
-            _poort8Utilities = new Poort8Utilities();
+            _utilities = new ThirdPartyUtilities();
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Poort8PolicyItem>> GetAsync([FromHeader] string token, [FromQuery] string myPartyId)
+        public async Task<IEnumerable<PolicyItem>> GetAsync([FromHeader] string token, [FromQuery] string myPartyId)
         {
             _client.DefaultRequestHeaders.Clear();
             _client.DefaultRequestHeaders.Add("ContentType", "application/json");
@@ -44,7 +26,7 @@ namespace SecurePolicyBasedDataAccess.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     var jsonString = await response.Content.ReadAsStringAsync();
-                    return JsonConvert.DeserializeObject<List<Poort8PolicyItem>>(jsonString);
+                    return JsonConvert.DeserializeObject<List<PolicyItem>>(jsonString);
                 }
             }
             catch (Exception ex)
@@ -57,9 +39,9 @@ namespace SecurePolicyBasedDataAccess.Controllers
         }
 
         [HttpPost("Policy")]
-        public async Task<string> PostAsync([FromHeader] string token, [FromBody] Poort8PolicyModel model)
+        public async Task<string> PostAsync([FromHeader] string token, [FromBody] PolicyModel model)
         {
-            var policy = _poort8Utilities.CreatePolicy(model);
+            var policy = _utilities.CreatePolicy(model);
             string dataRaw = JsonConvert.SerializeObject(policy, new JsonSerializerSettings
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
@@ -86,4 +68,3 @@ namespace SecurePolicyBasedDataAccess.Controllers
             }
         }
     }
-}
