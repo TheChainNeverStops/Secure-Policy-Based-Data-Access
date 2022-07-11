@@ -1,4 +1,4 @@
-[Route("api/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class AccessTokensController : ControllerBase
     {
@@ -11,19 +11,18 @@
             _client = httpClientFactory.CreateClient("iSHARE-Poort8");
         }
 
-        [HttpPost("{myIdentifier}")]
-        public async Task<string> GetToken(IFormFile isharePublicKey, IFormFile isharePrivateKey, string myIdentifier)
+        [HttpPost("{myIshareId}")]
+        public async Task<string> GetToken(IFormFile isharePublicKey, IFormFile isharePrivateKey, string myIshareId)
         {
             var tokenService = new ThirdPartyTokenService(_client);
             try
             {
                 string audParty = _settings.TargetAudience;
-                string issParty = myIdentifier;
+                string issParty = myIshareId;
                 string privateKey = await tokenService.ReadFormFileAsync(isharePrivateKey);
                 string publicKey = await tokenService.ReadFormFileAsync(isharePublicKey);
                 string urlSchemas = _settings.UrlSchemeAuthorize;
                 string urlGetToken = _settings.UrlPoort8GetToken;
-
                 if (string.IsNullOrEmpty(privateKey))
                 {
                     return Ok(new
@@ -41,16 +40,15 @@
                         ErrorMsg = $"Public key is not correct, please try again later."
                     });
                 }
-                
+
                 publicKey = publicKey.Replace("-----BEGIN CERTIFICATE-----", "");
                 publicKey = publicKey.Replace("-----END CERTIFICATE-----", "");
                 publicKey = publicKey.Replace("\r\n", "");
                 publicKey = publicKey.Replace(" ", "");
 
                 //Verify iSHARE ID with Certificate
-                var signingCertificate = new X509Certificate2(Convert.FromBase64String(publicKey));
-                string subject = signingCertificate.Subject;
-                if (string.IsNullOrEmpty(subject) || !subject.Contains(myIdentifier))
+                bool isValid = VerifyCertificateWithIshareId(privateKey, publicKey, myIshareId);
+                if(!isValid)
                 {
                     return Ok(new
                     {
@@ -58,7 +56,7 @@
                         ErrorMsg = $"PublicKey is not correct with your Identifier, please try again later."
                     });
                 }
-                
+
                 string clientAssertion = await tokenService.GetTokenFromSchemaAsync(audParty,
                     issParty, privateKey, publicKey, urlSchemas);
 
@@ -69,5 +67,17 @@
                 Log.Error($"Get token from schema has error {ex.Message}", ex);
                 throw new Exception($"Get token from schema has error. Please try again later.");
             }
+        }
+
+        private bool VerifyCertificateWithIshareId(privateKey, publicKey, myIshareId)
+        {
+            var signingCertificate = new X509Certificate2(Convert.FromBase64String(publicKey));
+            string subject = signingCertificate.Subject;
+            if (string.IsNullOrEmpty(subject) || !subject.Contains(myIshareId))
+            {
+                return false;
+            }
+            
+            return true;
         }
     }
