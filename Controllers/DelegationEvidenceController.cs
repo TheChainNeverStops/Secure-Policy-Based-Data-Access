@@ -11,7 +11,7 @@
             IManagePolicyService service, IHttpClientFactory httpClientFactory)
         {
             _settings = settingsAccessor.Value;
-            _client = httpClientFactory.CreateClient("iSHARE-Poort8");
+            _client = httpClientFactory.CreateClient("iSHARE");
             _client.BaseAddress = new Uri(_settings.Host);
             _service = service ?? throw new ArgumentNullException(nameof(service));
             _utilities = new ThirdPartyUtilities();
