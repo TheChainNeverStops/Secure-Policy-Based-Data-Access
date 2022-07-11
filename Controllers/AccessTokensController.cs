@@ -1,17 +1,4 @@
-
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using SecurePolicyBasedDataAccess.Infrastructure.Services;
-using SecurePolicyBasedDataAccess.Infrastructure.Settings;
-using Serilog;
-using System;
-using System.Net.Http;
-using System.Threading.Tasks;
-
-namespace SecurePolicyBasedDataAccess.Controllers
-{
-    [Route("api/[controller]")]
+[Route("api/[controller]")]
     [ApiController]
     public class AccessTokensController : ControllerBase
     {
@@ -27,7 +14,7 @@ namespace SecurePolicyBasedDataAccess.Controllers
         [HttpPost("{myIdentifier}")]
         public async Task<string> GetToken(IFormFile isharePublicKey, IFormFile isharePrivateKey, string myIdentifier)
         {
-            var tokenService = new Poort8TokenService(_client);
+            var tokenService = new ThirdPartyTokenService(_client);
             try
             {
                 string audParty = _settings.TargetAudience;
@@ -54,4 +41,3 @@ namespace SecurePolicyBasedDataAccess.Controllers
             }
         }
     }
-}
