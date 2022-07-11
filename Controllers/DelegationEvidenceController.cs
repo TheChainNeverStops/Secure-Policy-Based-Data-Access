@@ -20,7 +20,7 @@
         [HttpGet("VerifyingPermit")]
         public async Task<string> VerifyingPermitAsync([FromHeader] string token, [FromQuery] VerifyDataModel model, [FromQuery] bool showToken = false)
         {            
-            var delegation = _utilities.CreateDelegationEvidence(genericKey, model.GenericType, model.Issuer, model.Actor);
+            var delegation = _utilities.CreateDelegationEvidence(model.GenericKey, model.GenericType, model.Issuer, model.Actor);
             string dataRaw = JsonConvert.SerializeObject(delegation, new JsonSerializerSettings
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver(),
