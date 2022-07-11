@@ -1,18 +1,7 @@
-using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SecurePolicyBasedDataAccess.Infrastructure.Services
-{
-    public class Poort8TokenService
+public class TokenService
     {
         private readonly HttpClient _client;
-        public Poort8TokenService(HttpClient client)
+        public TokenService(HttpClient client)
         {
             _client = client;
         }
@@ -73,4 +62,3 @@ namespace SecurePolicyBasedDataAccess.Infrastructure.Services
             return token;
         }
     }
-}
