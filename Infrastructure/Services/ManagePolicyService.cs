@@ -1,20 +1,11 @@
-using Dapper;
-using MySql.Data.MySqlClient;
-using SecurePolicyBasedDataAccess.Models;
-using Serilog;
-using System;
-using System.Threading.Tasks;
-
-namespace SecurePolicyBasedDataAccess.Infrastructure.Services
-{
     public interface IManagePolicyService
     {
-        Task SavePolicyAsync(Poort8PolicyModel model, string policyId);
+        Task SavePolicyAsync(PolicyModel model, string policyId);
         Task<string> GetDelegationInfoAsync(string deliveryNumber);
         Task<string> GetDataInfoAsync(string genericKey, int genericType, string issuer, string actor);
     }
 
-    public class ManagePolicyService
+    public class ManagePolicyService: IManagePolicyService
     {
         private string _connectionString;
         public ManagePolicyService(string connectionString)
@@ -22,7 +13,7 @@ namespace SecurePolicyBasedDataAccess.Infrastructure.Services
             _connectionString = connectionString;
         }
 
-        public async Task SavePolicyAsync(Poort8PolicyModel model, string policyId)
+        public async Task SavePolicyAsync(string policyId)
         {
             try
             {
@@ -138,4 +129,3 @@ namespace SecurePolicyBasedDataAccess.Infrastructure.Services
             return "";
         }
     }
-}
