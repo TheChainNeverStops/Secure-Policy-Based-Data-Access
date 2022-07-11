@@ -1,5 +1,4 @@
-public class TokenDelegationModel
+    public class TokenDelegationModel
     {
         public string delegation_token { get; set; }
     }
-}
