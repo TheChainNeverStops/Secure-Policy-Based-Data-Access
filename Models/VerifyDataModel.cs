@@ -1,4 +1,4 @@
-public class Poort8VerifyDataModel
+public class VerifyDataModel
     {
         public string GenericKey { get; set; }
         public int GenericType { get; set; }
