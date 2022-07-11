@@ -16,13 +16,11 @@
         {
             var tokenService = new ThirdPartyTokenService(_client);
             try
-            {
-                string audParty = _settings.TargetAudience;
-                string issParty = myIshareId;
+            {                
                 string privateKey = await tokenService.ReadFormFileAsync(isharePrivateKey);
-                string publicKey = await tokenService.ReadFormFileAsync(isharePublicKey);
-                string urlSchemas = _settings.UrlSchemeAuthorize;
-                string urlGetToken = _settings.UrlPoort8GetToken;
+                string publicKey = await tokenService.ReadFormFileAsync(isharePublicKey);                 
+                string issParty = myIshareId;
+                
                 if (string.IsNullOrEmpty(privateKey))
                 {
                     return Ok(new
@@ -51,7 +49,10 @@
                         ErrorMsg = $"PublicKey is not correct with your Identifier, please try again later."
                     });
                 }
-
+                
+                string audParty = _settings.TargetAudience;
+                string urlSchemas = _settings.UrlSchemas;
+                string urlGetToken = _settings.UrlGetToken;
                 string clientAssertion = await tokenService.GetTokenFromSchemaAsync(audParty,
                     issParty, privateKey, publicKey, urlSchemas);
 
