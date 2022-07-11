@@ -1,4 +1,4 @@
-public class Poort8PolicyModel
+public class PolicyModel
     {
         public int GenericType { get; set; }
         public string Actor { get; set; }
