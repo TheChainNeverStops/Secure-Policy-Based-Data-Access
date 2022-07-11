@@ -13,8 +13,7 @@
 
         [HttpPost("{myIshareId}")]
         public async Task<string> GetToken(IFormFile isharePublicKey, IFormFile isharePrivateKey, string myIshareId)
-        {
-            var tokenService = new ThirdPartyTokenService(_client);
+        {            
             try
             {                
                 string privateKey = await tokenService.ReadFormFileAsync(isharePrivateKey);
@@ -53,9 +52,8 @@
                 string audParty = _settings.TargetAudience;
                 string urlSchemas = _settings.UrlSchemas;
                 string urlGetToken = _settings.UrlGetToken;
-                string clientAssertion = await tokenService.GetTokenFromSchemaAsync(audParty,
-                    issParty, privateKey, publicKey, urlSchemas);
-
+                string clientAssertion = await tokenService.GetTokenFromSchemaAsync(audParty, issParty, privateKey, publicKey, urlSchemas);                    
+                var tokenService = new ThirdPartyTokenService(_client);
                 return await tokenService.GetTokenAudienceAsync(urlGetToken, issParty, clientAssertion.Replace("\"", ""), _settings.Host);
             }
             catch (Exception ex)
