@@ -1,28 +1,10 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using SecurePolicyBasedDataAccess.Infrastructure.Extensions;
-using SecurePolicyBasedDataAccess.Infrastructure.Services;
-using SecurePolicyBasedDataAccess.Infrastructure.Settings;
-using SecurePolicyBasedDataAccess.Models;
-using Serilog;
-using System;
-using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SecurePolicyBasedDataAccess.Controllers
-{
-    [Route("api/[controller]")]
+[Route("api/[controller]")]
     [ApiController]
     public class DelegationEvidenceController : ControllerBase
     {
         private readonly HttpClient _client;
         private readonly IShareSettings _settings;
-        private readonly Poort8Utilities _poort8Utilities;
+        private readonly ThirdPartyUtilities _utilities;
         private readonly IManagePolicyService _service;
 
         public DelegationEvidenceController(IOptions<IShareSettings> settingsAccessor,
@@ -32,11 +14,11 @@ namespace SecurePolicyBasedDataAccess.Controllers
             _client = httpClientFactory.CreateClient("iSHARE-Poort8");
             _client.BaseAddress = new Uri(_settings.Host);
             _service = service ?? throw new ArgumentNullException(nameof(service));
-            _poort8Utilities = new Poort8Utilities();
+            _utilities = new ThirdPartyUtilities();
         }
 
         [HttpGet("MyPolicies")]
-        public async Task<string> GetPolicyAsync([FromHeader] string token, [FromQuery] Poort8VerifyDataModel model, [FromQuery] bool showToken = false)
+        public async Task<string> GetPolicyAsync([FromHeader] string token, [FromQuery] VerifyDataModel model, [FromQuery] bool showToken = false)
         {            
             string genericKey = await _service.GetDataInfoAsync(model.GenericKey, model.GenericType, model.Issuer, model.Actor);
             if (string.IsNullOrEmpty(genericKey))
@@ -80,7 +62,7 @@ namespace SecurePolicyBasedDataAccess.Controllers
                 return dataJson.delegation_token;
             }
             
-            var data = _poort8Utilities.ParseDelegationToken(dataJson.delegation_token);
+            var data = _utilities.ParseDelegationToken(dataJson.delegation_token);
             var isDeny = true;
             if (data.PolicySets.Any())
             {
@@ -94,5 +76,3 @@ namespace SecurePolicyBasedDataAccess.Controllers
             return isDeny ? "Deny" : "Permit";
         }
     }
-
-}
