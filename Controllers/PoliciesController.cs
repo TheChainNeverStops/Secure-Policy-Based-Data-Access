@@ -53,13 +53,8 @@
                 var content = new StringContent(dataRaw, Encoding.UTF8, "application/json");
                 HttpResponseMessage response = await _client.PostAsync($"{_settings.LinkPolicy}", content);
                 response.EnsureSuccessStatusCode();
-
-                var data = await response.Content.ReadAsStringAsync();
                 Log.Information($"Your policy has been created.");
-
-                var service = new ManagePolicyService(_settings.ConnectionStrings);
-                await service.SavePolicyAsync(model, policyId: data);
-                return data;
+                return await response.Content.ReadAsStringAsync();
             }
             catch (Exception ex)
             {
