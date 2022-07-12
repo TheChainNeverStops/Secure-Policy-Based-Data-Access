@@ -1,5 +1,3 @@
-namespace SecurePolicyBasedDataAccess.Infrastructure.Settings
-{
     public class IShareSettings
     {
         public string Host { get; set; }
@@ -10,4 +8,3 @@ namespace SecurePolicyBasedDataAccess.Infrastructure.Settings
         public string UrlGetToken { get; set; } = "ar-preview/ishare/connect/token";
         public string ConnectionStrings { get; set; }
     }
-}
