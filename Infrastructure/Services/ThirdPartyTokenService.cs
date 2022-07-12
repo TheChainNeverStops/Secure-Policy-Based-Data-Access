@@ -61,4 +61,28 @@
             var token = await response.Content.ReadAsStringAsync();
             return token;
         }
+        
+        public PlaybookPolicy CreatePolicy(PolicyModel model)
+        {
+            string resourceType = GetResourceTypeByModel(model);
+            return new Policy
+            {
+                Email = $"{model.Email}",
+                Organization = $"{model.MyPartyId}",
+                Username = $"{model.UserName}",
+                Policy = new Policy(resourceType)
+                {
+                    Actor = $"{model.ActorPartyId}",
+                    Issuer = $"{model.MyPartyId}",
+                    Note = $"{model.Note}",
+                    ContextRule = new ContextRule
+                    {
+                        ResourceIdentifier = $"{model.ResourceIdentifier}",
+                        ServiceProvider = $"{model.ServiceProviders}",
+                        NotBefore = int.Parse(DateTime.UtcNow.AddMinutes(1).ToEpoch()),
+                        NotOnOrAfter = int.Parse(model.ToDate.AddDays(1).AddSeconds(-1).ToEpoch()),
+                    }
+                }
+            };
+        }
     }
